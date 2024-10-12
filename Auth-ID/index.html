@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<script>
+async function Login() {
+    //Accessing The Elements Values For Necessary Login Parameters
+    const email = document.getElementById('Email').value;
+    const password = document.getElementById('Password').value;
+
+    try {
+        const response = await fetch('/users/LoginAM', {
+            //Calling The Relative API For The Login 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password }),
+            //Sending The Email & Password As Parameters In Request
+        });
+
+        const responseData = await response.json();
+        const message=responseData.message;
+
+        if (responseData.success) {
+            //Accessing The Token & ID After Login Success
+            const AuthToken=responseData.token
+            const user_id=responseData.userID
+            window.location.href = 'dashboard.html';
+            //Navigating To The Dashboard Page
+            localStorage.setItem('AuthToken', AuthToken)
+            localStorage.setItem("user_id", user_id)
+            //Storing The Essentials In Browsers Local Storage For Further Use & Authentication
+        }
+
+    } catch (error) {
+        alert("Error Connecting Server!");
+    }
+}
+
+
+
+</script>
