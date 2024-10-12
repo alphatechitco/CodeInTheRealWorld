@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<script>
+    document.getElementById('RegEmail').addEventListener('input', async function(event) {
+        // Access the Reg Email input field to trigger the API request and receive the response
+        const email = event.target.value;
+    
+        // Accessing the message field to display the email status
+        const message = document.getElementById('message');
+        // Taking control over the signup button
+        const signupButton = document.querySelector('button[type="button"]');
+    
+        try { 
+            // Calling Backend API
+            const response = await fetch('/users/checkEmail', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Fixed casing here
+                },
+                body: JSON.stringify({ email })
+            });
+    
+            const result = await response.json(); // Awaiting before converting the response to JSON format
+    
+            if (result.success) {
+                // Altering states based on condition
+                message.textContent = result.message;
+                signupButton.disabled = false; // Allow signup by activating button
+            } else {
+                message.textContent = result.message;
+                signupButton.disabled = true; // Restrict signup by deactivating button
+            }
+        } catch (error) {
+            console.error("Error connecting to server:", error); // Use console.error for logging the error
+        }
+    });
+    </script>
